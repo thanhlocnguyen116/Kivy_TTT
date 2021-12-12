@@ -16,8 +16,8 @@ from kivy.core.audio import SoundLoader
 from game_ai import Ai
 from tie_player_with_score import tie_player
 
-Config.set('graphics', 'width', '500')
-Config.set('graphics', 'height', '400')
+Config.set('graphics', 'width', '250')
+Config.set('graphics', 'height', '300')
 
 if not os.path.isfile("login_info.txt"):
     with open("login_info.txt", "w+") as file:
@@ -30,20 +30,29 @@ class WelcomeScreen(GridLayout):
         self.cols = 1
 
         self.welcome = Label(
-            text="Welcome to my game! Sign up or login below", color=[55, 0, 1, 1])
+            text="Chào mừng đến với game cờ Caro!", 
+            color=(0, 153, 0),
+        )
         self.add_widget(self.welcome)
 
-        self.login = Button(text="Login", font_size=30, size_hint=(1.2, 0.5))
+        self.login = Button(
+            text="Đăng nhập", 
+            font_size=30, 
+            size=(32, 32),
+            size_hint=(0.5, 0.5))
         self.login.bind(on_release=self.login_func)
         self.add_widget(self.login)
 
         # Creating animation for the three main buttons of our welcome screen
         animation = Animation(
-            background_color=[23, 0, 1, 1], duration=1.3, y=162)
+            background_color=[20, 0, 1, 1], duration=1.3, y=162)
         animation.start(self.login)
 
-        self.signup = Button(text="Signup", font_size=30,
-                             size_hint=(1.2, 0.5), pos=(0, -117))
+        self.signup = Button(
+            text="Đăng ký",
+            font_size=30,
+            size_hint=(1.2, 0.5), 
+            pos=(0, -117))
         self.signup.bind(on_release=self.signup_func)
         self.add_widget(self.signup)
 
@@ -52,7 +61,10 @@ class WelcomeScreen(GridLayout):
         animation.start(self.signup)
 
         self.settings = Button(
-            text="Game settings", font_size=30, size_hint=(1.2, 0.5), pos=(0, -160))
+            text="Cài đặt", 
+            font_size=30, 
+            size_hint=(1.2, 0.5), 
+            pos=(0, -160))
         self.settings.bind(on_press=self.settings_page_func)
         self.add_widget(self.settings)
 
@@ -62,13 +74,13 @@ class WelcomeScreen(GridLayout):
 
     # Creating functions to access our three main screen
     def signup_func(self, instance):
-        tic_tac_toe.screen_manager.current = "Signup Page"
+        tic_tac_toe.screen_manager.current = "Đăng ký"
 
     def login_func(self, instance):
-        tic_tac_toe.screen_manager.current = "Login Page"
+        tic_tac_toe.screen_manager.current = "Đăng nhập"
 
     def settings_page_func(self, instance):
-        tic_tac_toe.screen_manager.current = "Settings Page"
+        tic_tac_toe.screen_manager.current = "Cài đặt"
 
 
 class SignupScreen(GridLayout):
@@ -81,11 +93,11 @@ class SignupScreen(GridLayout):
         self.inside = GridLayout()
         self.inside.cols = 2
 
-        self.inside.add_widget(Label(text="First Name: "))
+        self.inside.add_widget(Label(text="Họ: "))
         self.first_name = TextInput(multiline=False)
         self.inside.add_widget(self.first_name)
 
-        self.inside.add_widget(Label(text="Last Name: "))
+        self.inside.add_widget(Label(text="Tên: "))
         self.last_name = TextInput(multiline=False)
         self.inside.add_widget(self.last_name)
 
@@ -93,17 +105,17 @@ class SignupScreen(GridLayout):
         self.email = TextInput(multiline=False)
         self.inside.add_widget(self.email)
 
-        self.inside.add_widget(Label(text="Password"))
+        self.inside.add_widget(Label(text="Mật khẩu"))
         self.password = TextInput(password=True, multiline=False)
         self.inside.add_widget(self.password)
 
-        self.inside.add_widget(Label(text="Enter password again"))
+        self.inside.add_widget(Label(text="Nhập lại mật khẩu"))
         self.again_password = TextInput(password=True, multiline=False)
         self.inside.add_widget(self.again_password)
 
         self.add_widget(self.inside)
 
-        self.signup = Button(text="Sign up", font_size=30,
+        self.signup = Button(text="Đăng ký", font_size=30,
                              size_hint=(1.0, 0.6))
         self.add_widget(self.signup)
         # It's important to check if the password fields are empty before checking if they are correct or not
@@ -112,7 +124,7 @@ class SignupScreen(GridLayout):
 
         # Creating a button to go back to the main screen
         self.welcome_page = Button(
-            text="Back to main screen", font_size=30, size_hint=(0.8, 0.4))
+            text="Trở lại", font_size=30, size_hint=(0.8, 0.4))
         self.add_widget(self.welcome_page)
         self.welcome_page.bind(on_press=self.back_to_home)
 
@@ -129,20 +141,20 @@ class SignupScreen(GridLayout):
                 popup.open()
 
                 tic_tac_toe.home_page.update_info(
-                    f"Welcome to your NEW home page {self.first_name.text} {self.last_name.text}")
+                    f"Welcome {self.first_name.text} {self.last_name.text}")
                 tic_tac_toe.screen_manager.current = "Home Page"
 
             else:
                 self.password.text = self.again_password.text = ""
 
                 popup = Popup(title="Password check error", content=Label(
-                    text="You passwords didn't match", color=[1, 0, 0, 1]), size_hint=(0.6, 0.2))
+                    text="Không khớp mật khẩu trên", color=[1, 0, 0, 1]), size_hint=(0.6, 0.2))
                 popup.open()
 
     def check_if_empty(self, instance):
         if not self.first_name.text or not self.last_name.text or not self.email.text:
             empty_warning = Popup(title="Input fields empty", content=Label(
-                text="You cannot leave any of the fields empty", color=[1, 0, 0, 1]), size_hint=(0.6, 0.2))
+                text="Ko được để trống ô bất kỳ", color=[1, 0, 0, 1]), size_hint=(0.6, 0.2))
             empty_warning.open()
 
     def write_to_file(self):
@@ -180,19 +192,19 @@ class LoginScreen(GridLayout):
         self.email = TextInput(multiline=False)
         self.inside.add_widget(self.email)
 
-        self.inside.add_widget(Label(text="Password"))
+        self.inside.add_widget(Label(text="Mật khẩu"))
         self.password = TextInput(password=True, multiline=False)
         self.inside.add_widget(self.password)
 
         self.add_widget(self.inside)
 
-        self.submit = Button(text="Submit!", font_size=30,
+        self.submit = Button(text="Chơi", font_size=30,
                              size_hint=(1.0, 0.6))
         self.add_widget(self.submit)
         self.submit.bind(on_press=self.check_input_info)
 
         self.welcome_page = Button(
-            text="Back to main screen", font_size=30, size_hint=(0.8, 0.4))
+            text="Trở lại", font_size=30, size_hint=(0.8, 0.4))
         self.add_widget(self.welcome_page)
         self.welcome_page.bind(on_press=self.back_to_home)
 
@@ -221,7 +233,7 @@ class LoginScreen(GridLayout):
             # if it had found then it would have updated the items in account_query_for with the correct credentials
             if self.account_query_for[0] == "email":
                 no_account_found_warning = Popup(title="No matching accounts", content=Label(
-                    text="We couldn't find your account", color=[1, 0, 0, 1]), size_hint=(0.6, 0.2))
+                    text="Tài khoản chưa được đăng ký", color=[1, 0, 0, 1]), size_hint=(0.6, 0.2))
                 no_account_found_warning.open()
 
             allowance = False
@@ -236,7 +248,7 @@ class LoginScreen(GridLayout):
                     self.account_query_for[1] = "password"
 
                     popup = Popup(title="Wrong password", content=Label(
-                        text="Your password is incorrect", color=[1, 0, 0, 1]), size_hint=(0.6, 0.2))
+                        text="Sai mật khẩu", color=[1, 0, 0, 1]), size_hint=(0.6, 0.2))
                     popup.open()
 
                 if allowance:
@@ -267,20 +279,20 @@ class HomeScreen(GridLayout):
         message_animation.start(self.message)
 
         # Adding a button to go back to the login screen
-        self.back = Button(text="Start your game",
+        self.back = Button(text="Bất đầu",
                            font_size=30, size_hint=(0.6, 0.2))
         self.add_widget(self.back)
         self.back.bind(on_release=self.enter_game_screen)
 
         # Adding a button to go the highscores screen
         self.highscores = Button(
-            text="View high scores", font_size=28, size_hint=(0.55, 0.19))
+            text="Điểm cao", font_size=28, size_hint=(0.55, 0.19))
         self.add_widget(self.highscores)
         self.highscores.bind(on_press=self.enter_scores_screen)
 
         # Adding a button to start the game
         self.game_start = Button(
-            text="Logout", font_size=23, size_hint=(0.6, 0.2))
+            text="Đăng xuất", font_size=23, size_hint=(0.6, 0.2))
         self.add_widget(self.game_start)
         self.game_start.bind(on_press=self.logout)
 
@@ -301,7 +313,7 @@ class HomeScreen(GridLayout):
         tic_tac_toe.screen_manager.current = "HighScores Page"
 
     def logout(self, *_):
-        tic_tac_toe.screen_manager.current = "Login Page"
+        tic_tac_toe.screen_manager.current = "Đăng nhập"
 
 
 class GameScreen(GridLayout):
@@ -378,8 +390,8 @@ class GameScreen(GridLayout):
             pop_up_layout = BoxLayout(orientation='vertical', padding=(10))
 
             # Setting up the popup_title depending on who the winner is or if no one won
-            popup_title = f"{self.current_player} is the winner!" if winner == "Player" else "AI beat your ass!"
-            popup = Popup(title=popup_title if winner != "" else "It's a tie!!",
+            popup_title = f"{self.current_player} thắng!" if winner == "Player" else "Máy thắng!"
+            popup = Popup(title=popup_title if winner != "" else "Hoà!!",
                           content=pop_up_layout, size_hint=(0.8, 0.7), auto_dismiss=False)
 
             if os.path.isdir(r"Game Sounds/"):
@@ -395,17 +407,17 @@ class GameScreen(GridLayout):
                         loss_sound.play()
 
             # Setting up the popup message depending on who won. ALso setting up the color
-            popup_msg = "You have won the game!!" if winner == "Player" else "You have lost the game!!"
+            popup_msg = "Bạn đã chến thắng!!" if winner == "Player" else "Bạn vừa thua máy?!!"
             popup_msg_color = [
                 0, 1, 0, 1] if winner == "Player" else [1, 0, 0, 1]
-            game_over_msg = Label(text=popup_msg if winner != "" else "The game is over. It is a tie!!",
+            game_over_msg = Label(text=popup_msg if winner != "" else "Kết thúc, hoà!!",
                                   color=popup_msg_color if winner != "" else [1, 1, 1, 1])
 
             pop_up_layout.add_widget(game_over_msg)
 
             back_to_user_page = Button(
-                text="Go back", on_press=lambda instance: self.reset_board(popup, True))
-            another_game = Button(text="Or...player another game!!",
+                text="Trở lại", on_press=lambda instance: self.reset_board(popup, True))
+            another_game = Button(text="Game mới!!",
                                   on_press=lambda instance: self.reset_board(popup, False))
             
             back_to_user_page.bind(on_press=popup.dismiss)
@@ -452,9 +464,9 @@ class HighScoresScreen(GridLayout):
         self.inside.rows = len(self.file.readlines())
         self.file.close()
 
-        self.name_label = Label(text="Name")
+        self.name_label = Label(text="Tên")
         self.inside.add_widget(self.name_label)
-        self.score_label = Label(text="Score")
+        self.score_label = Label(text="Điểm")
         self.inside.add_widget(self.score_label)
 
         with open("highscores.txt", "r") as file:
@@ -501,22 +513,22 @@ class SettingsScreen(GridLayout):
         self.rows = 4
 
         # A settings to manage and view the high scores
-        self.high_scores_button = Button(text="View high scores", size_hint=(
+        self.high_scores_button = Button(text="Xem điểm cao", size_hint=(
             0.5, 0.2), background_color=[1, 1, 0, 1], on_press=self.view_high_scores)
         self.add_widget(self.high_scores_button)
 
         # This resets all the player info from the app. Use with caution
-        self.reset_info_button = Button(text="Reset game info", size_hint=(
+        self.reset_info_button = Button(text="Reset game", size_hint=(
             0.5, 0.2), background_color=[1, 0, 0, 0.75], on_press=self.manage_game_reset)
         self.add_widget(self.reset_info_button)
 
         # A settings to manage the players
         self.manage_players_button = Button(
-            text="Manage players", size_hint=(0.5, 0.2), on_press=self.manage_players)
+            text="Cài đặt người chơi", size_hint=(0.5, 0.2), on_press=self.manage_players)
         self.add_widget(self.manage_players_button)
 
         # A settings to go back to the welcome screen
-        self.welcome_page = Button(text="Back to main screen", size_hint=(
+        self.welcome_page = Button(text="Trở lại", size_hint=(
             0.3, 0.2), on_press=self.back_to_home)
         self.add_widget(self.welcome_page)
 
@@ -524,7 +536,7 @@ class SettingsScreen(GridLayout):
         tic_tac_toe.screen_manager.current = "Welcome Page"
 
     def view_high_scores(self, instance):
-        tic_tac_toe.highscores_page.here_from = "Settings Page"
+        tic_tac_toe.highscores_page.here_from = "Cài đặt"
         tic_tac_toe.highscores_page.clear_widgets()
         tic_tac_toe.highscores_page.design_scores_page()
         tic_tac_toe.screen_manager.current = "HighScores Page"
@@ -533,12 +545,12 @@ class SettingsScreen(GridLayout):
         pop_up_layout = BoxLayout(orientation='vertical', padding=(10))
 
         deletion_message = Label(
-            text="Are you sure? This cannot be undone.", color=[1, 0, 0, 1])
+            text="Bạn chắc chứ? Hành động này không thể khôi phục", color=[1, 0, 0, 1])
         pop_up_layout.add_widget(deletion_message)
 
-        yes_button = Button(text="Yes reset the game")
+        yes_button = Button(text="Vâng, tôi biết")
         no_button = Button(
-            text="Don't reset my game!!")
+            text="Khoan đã")
 
         pop_up_layout.add_widget(yes_button)
         pop_up_layout.add_widget(no_button)
@@ -564,12 +576,12 @@ class SettingsScreen(GridLayout):
             tic_tac_toe.players_page.canvas.clear()
 
             tic_tac_toe.players_page.cols = 1
-            tic_tac_toe.players_page.go_back = Button(text="Go back to settings", size_hint=(
+            tic_tac_toe.players_page.go_back = Button(text="Trở lại", size_hint=(
                 0.8, 0.19), on_press=tic_tac_toe.players_page.back_to_settings)
             tic_tac_toe.players_page.add_widget(
                 tic_tac_toe.players_page.go_back)
 
-            deletion_message.text = "Success! This popup will dismiss any time now."
+            deletion_message.text = "Thành công"
             deletion_message.color = [0, 1, 0, 1]
 
             Clock.schedule_once(popup.dismiss, 0.5)
@@ -622,12 +634,12 @@ class ManagePlayers(GridLayout):
                 pop_up_layout = BoxLayout(orientation='vertical', padding=(10))
 
                 deletion_message = Label(
-                    text="Are you sure? You cannot undo this.", color=[1, 0, 0, 1])
+                    text="Bạn có chắc? Hành động này ko thể khôi phục", color=[1, 0, 0, 1])
                 pop_up_layout.add_widget(deletion_message)
 
-                yes_button = Button(text="Yes delete the player")
+                yes_button = Button(text="Chắc")
                 no_button = Button(
-                    text="I changed my mind. The player can stay!")
+                    text="Để nghĩ lại đã")
 
                 pop_up_layout.add_widget(yes_button)
                 pop_up_layout.add_widget(no_button)
@@ -668,7 +680,7 @@ class ManagePlayers(GridLayout):
                                 f.write(line)
 
                     # Changing the warning message and displaying the success message in green color
-                    deletion_message.text = "Success! This popup will dismiss any time now."
+                    deletion_message.text = "Thành công!"
                     deletion_message.color = [0, 1, 0, 1]
 
                     Clock.schedule_once(popup.dismiss, 0.5)
@@ -689,7 +701,7 @@ class ManagePlayers(GridLayout):
 
                 labels_dict["player_label_" + str(count)] = Label(text=name)
                 buttons_dict["remove_butt_" + str(count)] = Button(
-                    text=f"Remove {name}", on_press=manage_player_deletion)
+                    text=f"Xoá bỏ {name}", on_press=manage_player_deletion)
 
             for label, button in zip(labels_dict.values(), buttons_dict.values()):
                 self.inside.add_widget(label)
@@ -698,17 +710,17 @@ class ManagePlayers(GridLayout):
         self.add_widget(self.inside)
 
         self.cols = 1
-        self.go_back = Button(text="Go back to settings", size_hint=(
+        self.go_back = Button(text="Trở lại", size_hint=(
             0.8, 0.19), on_press=self.back_to_settings)
         self.add_widget(self.go_back)
 
     def back_to_settings(self, instance):
-        tic_tac_toe.screen_manager.current = "Settings Page"
+        tic_tac_toe.screen_manager.current = "Cài đặt"
 
 
 class MyApp(App):
     def build(self):
-        self.title = "Tic Tac Toe"
+        self.title = "Cờ Caro"
         self.screen_manager = ScreenManager(transition=SwapTransition())
 
         # Creating all of our screens to show up
@@ -720,13 +732,13 @@ class MyApp(App):
 
         # Signup Screen
         self.signup_page = SignupScreen()
-        screen = Screen(name="Signup Page")
+        screen = Screen(name="Đăng ký")
         screen.add_widget(self.signup_page)
         self.screen_manager.add_widget(screen)
 
         # Login Screen
         self.login_page = LoginScreen()
-        screen = Screen(name="Login Page")
+        screen = Screen(name="Đăng nhập")
         screen.add_widget(self.login_page)
         self.screen_manager.add_widget(screen)
 
@@ -750,7 +762,7 @@ class MyApp(App):
 
         # Making a settings screen for managing certain things in the game
         self.settings_page = SettingsScreen()
-        screen = Screen(name="Settings Page")
+        screen = Screen(name="Cài đặt")
         screen.add_widget(self.settings_page)
         self.screen_manager.add_widget(screen)
 
